@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.attendance.IWorkscheduleDao">
+  <resultMap id="BaseResultMap" type="entity.Workschedule">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="depid" jdbcType="VARCHAR" property="depid" />
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="username" jdbcType="VARCHAR" property="username"/>
+    <result column="departmentname" jdbcType="VARCHAR" property="departmentname"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userid, type, depid, date, remark
+  </sql>
+  <select id="findByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select u.name as username,d.name as departmentname,w.id,w.type,w.remark,w.date
+    from workschedule w,user u,department d
+    where w.userid=u.id and u.depid=d.id and u.name like '%${username}%' and  d.name like '%${departmentname}%'
+    <if test="begindate != '' and enddate != ''">
+          and (w.date between #{begindate} and #{enddate})
+    </if>
+</select>
+  <select id="getMe" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select u.name as username,d.name as departmentname,w.id,w.type,w.remark,w.date
+    from workschedule w,user u,department d
+    where w.id = #{id,jdbcType=VARCHAR} and u.id=w.userid and u.depid = d.id
+  </select>
+  <delete id="delete" parameterType="java.lang.String">
+    delete from workschedule
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="save" parameterType="entity.Workschedule">
+    insert into workschedule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="depid != null">
+        depid,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="depid != null">
+        #{depid,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="entity.Workschedule">
+    update workschedule
+    <set>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="depid != null">
+        depid = #{depid,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        date = #{date,jdbcType=DATE},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

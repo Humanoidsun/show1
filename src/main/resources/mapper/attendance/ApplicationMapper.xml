@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.attendance.IApplicationDao">
+  <resultMap id="BaseResultMap" type="entity.Application">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="text" jdbcType="VARCHAR" property="text" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="submittime" jdbcType="TIMESTAMP" property="submittime" />
+    <result column="approvaltime" jdbcType="TIMESTAMP" property="approvaltime" />
+    <result column="approvalid" jdbcType="VARCHAR" property="approvalid" />
+    <result column="submitid" jdbcType="VARCHAR" property="submitid" />
+    <result column="typename" jdbcType="VARCHAR" property="typename"/>
+    <result column="approvalname" jdbcType="VARCHAR" property="approvalname"/>
+    <result column="submitname" jdbcType="VARCHAR" property="submitname"/>
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, type, text, picture, status, submittime, approvaltime, approvalid, submitid
+  </sql>
+  <sql id="conditionByPower">
+        <where>
+            <trim prefix="" suffixOverrides="and">
+                <trim prefix="(" suffix=")" suffixOverrides="or">
+                    <if test="submitid!=null">
+                        submitid like '%${submitid}%' or
+                    </if>
+                </trim>
+            </trim>
+        </where>
+    </sql>
+  <delete id="delete" parameterType="java.lang.String">
+    delete from application
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <select id="findapp" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select a.id,a.picture,a.status,a.text,a.submittime,a.approvaltime,b.name as submitname,c.name as approvalname,d.typename
+        from application a
+        inner join user b on b.id=a.submitid
+        inner join user c on c.id = a.approvalid
+        inner join applicationtype d on d.id=a.type
+        and a.approvalid=#{approvalid} and b.name like '%${submitname}%' and a.submittime like '${submittime}%';
+    </select>
+  <select id="findbyid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select a.id,a.picture,a.status,a.text,a.submittime,a.approvaltime,b.name as submitname,c.name as approvalname,d.typename
+        from application a
+        inner join user b on b.id=a.submitid
+        inner join user c on c.id = a.approvalid
+        inner join applicationtype d on d.id=a.type
+        and a.id=#{id};
+   </select>
+  <insert id="insert" parameterType="entity.Application">
+    insert into application (id, type, text, 
+      picture, status, submittime, 
+      approvaltime, approvalid, submitid
+      )
+    values (#{id,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{text,jdbcType=VARCHAR},
+      #{picture,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{submittime,jdbcType=TIMESTAMP},
+      #{approvaltime,jdbcType=TIMESTAMP}, #{approvalid,jdbcType=VARCHAR}, #{submitid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="save" parameterType="entity.Application">
+    insert into application
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="text != null">
+        text,
+      </if>
+      <if test="picture != null">
+        picture,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="submittime != null">
+        submittime,
+      </if>
+      <if test="approvaltime != null">
+        approvaltime,
+      </if>
+      <if test="approvalid != null">
+        approvalid,
+      </if>
+      <if test="submitid != null">
+        submitid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="submittime != null">
+        #{submittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvaltime != null">
+        #{approvaltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalid != null">
+        #{approvalid,jdbcType=VARCHAR},
+      </if>
+      <if test="submitid != null">
+        #{submitid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="editapp" parameterType="java.util.Map">
+    update application
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        text = #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        picture = #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="submittime != null">
+        submittime = #{submittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvaltime != null">
+        approvaltime = #{approvaltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalid != null">
+        approvalid = #{approvalid,jdbcType=VARCHAR},
+      </if>
+      <if test="submitid != null">
+        submitid = #{submitid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="entity.Application">
+    update application
+    set type = #{type,jdbcType=VARCHAR},
+      text = #{text,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      submittime = #{submittime,jdbcType=TIMESTAMP},
+      approvaltime = #{approvaltime,jdbcType=TIMESTAMP},
+      approvalid = #{approvalid,jdbcType=VARCHAR},
+      submitid = #{submitid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <insert id="submitApplication" parameterType="java.util.Map">
+    insert into application
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="text != null">
+        text,
+      </if>
+      <if test="picture != null">
+        picture,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="submittime != null">
+        submittime,
+      </if>
+      <if test="approvalid != null">
+        approvalid,
+      </if>
+      <if test="submitid != null">
+        submitid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="submittime != null">
+        #{submittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalid != null">
+        #{approvalid,jdbcType=VARCHAR},
+      </if>
+      <if test="submitid != null">
+        #{submitid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="applicationSubmitFind" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select a.id,d.typename,a.status,a.approvaltime,c.name as approvalname
+        from application a
+        inner join user c on c.id = a.approvalid
+        inner join applicationtype d on d.id=a.type
+        and d.id=#{type} and a.submittime like '${submittime}%' and a.submitid =#{submitid};
+  </select>
+</mapper>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.attendance.ICompanyDao">
+  <resultMap id="BaseResultMap" type="entity.Company">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="bossid" jdbcType="VARCHAR" property="bossid" />
+    <result column="comname" jdbcType="VARCHAR" property="comname" />
+    <result column="comlogo" jdbcType="VARCHAR" property="comlogo" />
+    <result column="comphone" jdbcType="VARCHAR" property="comphone" />
+    <result column="comsize" jdbcType="INTEGER" property="comsize" />
+    <result column="comsell" jdbcType="VARCHAR" property="comsell" />
+    <result column="comaddress" jdbcType="VARCHAR" property="comaddress" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, bossid, comname, comlogo, comphone, comsize, comsell, comaddress
+  </sql>
+  <select id="getMe" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from company
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findCompany" parameterType="entity.Company" resultType="entity.Company">
+    select * from company
+  </select>
+
+  <delete id="delete" parameterType="java.lang.String">
+    delete from company
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="entity.Company">
+    insert into company (id, bossid, comname, 
+      comlogo, comphone, comsize, 
+      comsell, comaddress)
+    values (#{id,jdbcType=VARCHAR}, #{bossid,jdbcType=VARCHAR}, #{comname,jdbcType=VARCHAR}, 
+      #{comlogo,jdbcType=VARCHAR}, #{comphone,jdbcType=VARCHAR}, #{comsize,jdbcType=INTEGER}, 
+      #{comsell,jdbcType=VARCHAR}, #{comaddress,jdbcType=VARCHAR})
+  </insert>
+  <insert id="save" parameterType="entity.Company">
+    insert into company
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="bossid != null">
+        bossid,
+      </if>
+      <if test="comname != null">
+        comname,
+      </if>
+      <if test="comlogo != null">
+        comlogo,
+      </if>
+      <if test="comphone != null">
+        comphone,
+      </if>
+      <if test="comsize != null">
+        comsize,
+      </if>
+      <if test="comsell != null">
+        comsell,
+      </if>
+      <if test="comaddress != null">
+        comaddress,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="bossid != null">
+        #{bossid,jdbcType=VARCHAR},
+      </if>
+      <if test="comname != null">
+        #{comname,jdbcType=VARCHAR},
+      </if>
+      <if test="comlogo != null">
+        #{comlogo,jdbcType=VARCHAR},
+      </if>
+      <if test="comphone != null">
+        #{comphone,jdbcType=VARCHAR},
+      </if>
+      <if test="comsize != null">
+        #{comsize,jdbcType=INTEGER},
+      </if>
+      <if test="comsell != null">
+        #{comsell,jdbcType=VARCHAR},
+      </if>
+      <if test="comaddress != null">
+        #{comaddress,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="entity.Company">
+    update company
+    <set>
+      <if test="bossid != null">
+        bossid = #{bossid,jdbcType=VARCHAR},
+      </if>
+      <if test="comname != null">
+        comname = #{comname,jdbcType=VARCHAR},
+      </if>
+      <if test="comlogo != null">
+        comlogo = #{comlogo,jdbcType=VARCHAR},
+      </if>
+      <if test="comphone != null">
+        comphone = #{comphone,jdbcType=VARCHAR},
+      </if>
+      <if test="comsize != null">
+        comsize = #{comsize,jdbcType=INTEGER},
+      </if>
+      <if test="comsell != null">
+        comsell = #{comsell,jdbcType=VARCHAR},
+      </if>
+      <if test="comaddress != null">
+        comaddress = #{comaddress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="entity.Company">
+    update company
+    set bossid = #{bossid,jdbcType=VARCHAR},
+      comname = #{comname,jdbcType=VARCHAR},
+      comlogo = #{comlogo,jdbcType=VARCHAR},
+      comphone = #{comphone,jdbcType=VARCHAR},
+      comsize = #{comsize,jdbcType=INTEGER},
+      comsell = #{comsell,jdbcType=VARCHAR},
+      comaddress = #{comaddress,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.inter.attachment.IKesunAttachment">
+    <resultMap id="BaseResultMap" type="entity.KesunAttachment">
+        <result column="id" property="id"/>
+        <result column="oldId" property="oldId"/>
+        <result column="name" property="name"/>
+        <result column="createDate" property="createDate"/>
+        <result column="status" property="status"/>
+        <result column="description" property="description"/>
+        <result column="address" property="address"/>
+        <result column="type" property="type"/>
+        <result column="address" property="address"/>
+        <result column="size" property="size"/>
+        <result column="logoAddress" property="logoAddress"/>
+        <result column="canDownload" property="canDownload"/>
+        <result column="canShare" property="canShare"/>
+        <result column="canRead" property="canRead"/>
+        <result column="downloadCount" property="downloadCount"/>
+        <result column="readCount" property="readCount"/>
+        <result column="shareCount" property="shareCount"/>
+        <association property="user" javaType="kesun.entity.system.User">
+            <id column="user" property="id"></id>
+            <result column="userName" property="name"/>
+        </association>
+
+        <association property="actor" javaType="kesun.entity.system.Actor">
+            <id column="actor" property="id"></id>
+            <result column="actorName" property="name"/>
+        </association>
+
+        <association property="org" javaType="kesun.entity.system.Organization">
+            <id column="org" property="id"></id>
+            <result column="orgName" property="name"/>
+        </association>
+    </resultMap>
+    <sql id="Base_Column_List">
+      id,name,createDate,status,address,type,size,canDownload,canShare,canRead,downloadCount,shareCount,readCount
+    </sql>
+    <sql id="colums">
+        <trim suffix="" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="createDate != null">
+                createDate,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="user != null">
+                user,
+            </if>
+            <if test="actor != null">
+                actor,
+            </if>
+            <if test="org != null">
+                org,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+
+            <if test="type != null">
+                type,
+            </if>
+
+            <if test="size != null">
+                size,
+            </if>
+
+            <if test="logoAddress != null">
+                logoAddress,
+            </if>
+
+            <if test="canDownload != null">
+                canDownload,
+            </if>
+
+            <if test="canShare != null">
+                canShare,
+            </if>
+            <if test="canRead != null">
+                canRead,
+            </if>
+            <if test="downloadCount != null">
+                downloadCount,
+            </if>
+            <if test="readCount != null">
+                readCount,
+            </if>
+            <if test="shareCount != null">
+                shareCount,
+            </if>
+        </trim>
+    </sql>
+    <sql id="columsValue">
+        <trim suffix="" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="createDate != null">
+                #{createDate},
+            </if>
+            <if test="description != null">
+                #{description},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="user != null">
+                #{user.id},
+            </if>
+            <if test="actor != null">
+                #{actor.id},
+            </if>
+            <if test="org != null">
+                #{org.id},
+            </if>
+            <if test="address != null">
+                #{address},
+            </if>
+
+            <if test="type != null">
+                #{type},
+            </if>
+
+            <if test="size != null">
+                #{size},
+            </if>
+
+            <if test="logoAddress != null">
+                #{logoAddress},
+            </if>
+
+            <if test="canDownload != null">
+                #{canDownload},
+            </if>
+
+            <if test="canShare != null">
+                #{canShare},
+            </if>
+            <if test="canRead != null">
+                #{canRead},
+            </if>
+            <if test="downloadCount != null">
+                #{downloadCount},
+            </if>
+            <if test="readCount != null">
+                #{readCount},
+            </if>
+            <if test="shareCount != null">
+                #{shareCount},
+            </if>
+
+        </trim>
+    </sql>
+    <sql id="conditionByPower">
+        <where>
+            <trim prefix="" suffixOverrides="and">
+                org=#{org} and
+                user=#{user} and
+                <trim prefix="(" suffix=")" suffixOverrides="or">
+                    <if test="name!=null">
+                        name like '%${name}%' or
+                    </if>
+                </trim>
+            </trim>
+        </where>
+    </sql>
+    <!--单个对象新增-->
+    <insert id="save" parameterType="entity.User">
+        insert into user(id,loginid,password) values(#{id},#{loginid},#{password})
+        <!--insert into kesunattachment (-->
+        <!--<include refid="colums"/>-->
+        <!--) values (-->
+        <!--<include refid="columsValue"/>)-->
+    </insert>
+    <!--批量新增-->
+    <insert id="batchSave" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index">
+        insert into kesunattachment (
+        id,name,user,actor,org
+        ) values
+            (
+            #{item.id},#{item.name},#{item.user.id},#{item.actor.id},#{item.org.id}
+            );
+        </foreach>
+    </insert>
+    <!--单个对象更新-->
+    <update id="update" parameterType="entity.KesunAttachment">
+        update kesunattachment set
+        <trim suffix="" suffixOverrides=",">
+            <if test="id != null">
+                id=#{id},
+            </if>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="createDate != null">
+                createDate=#{createDate},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="user != null">
+                user=#{user.id},
+            </if>
+            <if test="actor != null">
+                actor=#{actor.id},
+            </if>
+            <if test="org != null">
+                org=#{org.id},
+            </if>
+            <if test="address != null">
+                address=#{address},
+            </if>
+
+        </trim>
+        where id=#{oldId,jdbcType=VARCHAR}
+    </update>
+    <!--对象批量更新-->
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update kesunattachment set
+            <trim suffix="" suffixOverrides=",">
+                <if test="id != null">
+                    id=#{item.id},
+                </if>
+                <if test="oldId != null">
+                    oldId=#{item.oldId},
+                </if>
+                <if test="name != null">
+                    name=#{item.name},
+                </if>
+                <if test="createDate != null">
+                    createDate=#{item.createDate},
+                </if>
+                <if test="status != null">
+                    status=#{item.status},
+                </if>
+                <if test="description != null">
+                    description=#{item.description},
+                </if>
+                <if test="user != null">
+                    user=#{item.user},
+                </if>
+                <if test="actor != null">
+                    actor=#{item.actor},
+                </if>
+                <if test="org != null">
+                    org=#{item.org},
+                </if>
+                <if test="address != null">
+                    address=#{item.address},
+                </if>
+            </trim>
+            where id=#{item.oldId,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+    <!--单个对象删除-->
+    <delete id="delete" parameterType="java.lang.String">
+      delete from kesunattachment where id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <!--批量删除-->
+    <delete id="batchDelete" parameterType="java.util.List">
+        delete from kesunattachment
+        <where>
+            id in
+            <foreach collection="list" item="item" separator="," open="(" close=")">#{item,jdbcType=VARCHAR}</foreach>
+        </where>
+
+    </delete>
+    <!--单个对象查找-->
+    <select id="getMe" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        *
+        from kesunattachment where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <!--查找，以Map返回-->
+    <select id="findForMap" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from kesunattachment
+        <include refid="conditionByPower"></include>
+        order by name ASC
+
+    </select>
+    <!--快速查找，以Map返回-->
+    <select id="fastFind" parameterType="java.util.Map" resultType="java.util.Map">
+        select id,name
+        from kesunattachment
+        <include refid="conditionByPower"></include>
+        order by name ASC
+    </select>
+    <!--查询，以对象集合返回-->
+    <select id="find" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kesunattachment
+        <include refid="conditionByPower"></include>
+        order by name ASC
+    </select>
+    <!--返回查找条数-->
+    <select id="getRowsCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) as total from attachment
+        <include refid="conditionByPower"></include>
+    </select>
+    <!--分页查找-->
+    <select id="findByPage" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from kesunattachment
+        <include refid="conditionByPower"></include>
+            order by name ASC
+            <if test="start !=0 or limit!=0">
+                limit #{start},#{limit}
+            </if>
+
+    </select>
+    <!--判断数据是否在使用中-->
+    <select id="objectInUse" parameterType="java.lang.String" resultType="java.lang.Boolean">
+        <![CDATA[ select count(id) from attachment where name=#{id} ]]>
+    </select>
+</mapper>

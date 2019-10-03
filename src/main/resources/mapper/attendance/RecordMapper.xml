@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.attendance.IRecordDao">
+  <resultMap id="BaseResultMap" type="entity.Record">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="amorpm" jdbcType="VARCHAR" property="amorpm" />
+    <result column="datetime" jdbcType="TIMESTAMP" property="datetime" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="userdepid" jdbcType="VARCHAR" property="userdepid" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="username" jdbcType="VARCHAR" property="username"/>
+    <result column="departmentname" jdbcType="VARCHAR" property="departmentname"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, type, amorpm, datetime, userid, userdepid, status, remark
+  </sql>
+  <insert id="save" parameterType="entity.Record">
+    insert into record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="amorpm != null">
+        amorpm,
+      </if>
+      <if test="datetime != null">
+        datetime,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="userdepid != null">
+        userdepid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="amorpm != null">
+        #{amorpm,jdbcType=INTEGER},
+      </if>
+      <if test="datetime != null">
+        #{datetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="userdepid != null">
+        #{userdepid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getMe" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from record
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <!--按照员工名称和查询时间，查出来所有的record-->
+  <select id="findUserForForm" resultMap="BaseResultMap">
+    select u.name as username,d.name as departmentname,r.*
+    from user u,department d,record r
+    where u.name like '%${findname}%'
+    and r.userid = u.id
+    and u.depid = d.id
+    and r.datetime between #{begintime} and #{endtime}
+  </select>
+
+  <select id="findDepartmentForForm" resultMap="BaseResultMap">
+    select u.name as username,d.name as departmentname,r.*
+    from user u,department d,record r
+    where d.name like '%${findname}%'
+    and r.userid = u.id
+    and u.depid = d.id
+    and r.datetime between #{begintime} and #{endtime}
+  </select>
+
+  <!--修改record时填充弹窗用-->
+  <select id="findUserById" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select u.name as username,d.name as departmentname,r.*
+    from user u,department d,record r
+    where r.id = #{id}
+    and r.userid = u.id
+    and u.depid = d.id
+  </select>
+
+  <!--按照员工名称和查询时间，查出来状态的次数，用来填充图表-->
+  <select id="getUserData" parameterType="java.util.Map" resultType="entity.Data">
+    select count(r.id) number,r.status
+    from record r,user u
+    where r.userid = u.id
+    and u.name like '%${findname}%'
+    and r.datetime between #{begintime} and #{endtime}
+    group by r.status;
+  </select>
+
+  <!--按照部门名称和查询事件，查出来状态的次数，用来填充图表-->
+  <select id="getDepartmentData" parameterType="java.util.Map" resultType="entity.Data">
+    select count(r.id) as number,r.status
+    from record r,user u,department d
+    where u.id=r.userid
+    and u.depid=d.id
+    and d.name like '%${findname}%'
+    and r.datetime between #{begintime} and #{endtime} group by r.status;
+  </select>
+
+  <delete id="delete" parameterType="java.lang.String">
+    delete from record
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertInfo" parameterType="entity.Record">
+    insert into record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="amorpm != null">
+        amorpm,
+      </if>
+      <if test="datetime != null">
+        datetime,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="userdepid != null">
+        userdepid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="amorpm != null">
+        #{amorpm,jdbcType=VARCHAR},
+      </if>
+      <if test="datetime != null">
+        #{datetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="userdepid != null">
+        #{userdepid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateInfo" parameterType="java.util.Map">
+    update record
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="amorpm != null">
+        amorpm = #{amorpm,jdbcType=VARCHAR},
+      </if>
+      <if test="datetime != null">
+        datetime = #{datetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="userdepid != null">
+        userdepid = #{userdepid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="findByTime" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from  record
+    where datetime between #{begintime,jdbcType=TIMESTAMP} and  #{endtime,jdbcType=TIMESTAMP} and userid = #{userid,jdbcType=VARCHAR}
+  </select>
+</mapper>

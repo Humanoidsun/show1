@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.attendance.ICheckinruleDao">
+  <resultMap id="BaseResultMap" type="entity.Checkinrule">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="amonbegintime" jdbcType="TIMESTAMP" property="amonbegintime" />
+    <result column="amonendtime" jdbcType="TIMESTAMP" property="amonendtime" />
+    <result column="amoffbegintime" jdbcType="TIMESTAMP" property="amoffbegintime" />
+    <result column="amoffendtime" jdbcType="TIMESTAMP" property="amoffendtime" />
+    <result column="pmonbegintime" jdbcType="TIMESTAMP" property="pmonbegintime" />
+    <result column="pmonendtime" jdbcType="TIMESTAMP" property="pmonendtime" />
+    <result column="pmoffbegintime" jdbcType="TIMESTAMP" property="pmoffbegintime" />
+    <result column="pmoffendtime" jdbcType="TIMESTAMP" property="pmoffendtime" />
+    <result column="checkinsite" jdbcType="VARCHAR" property="checkinsite" />
+    <result column="abnnumtowarn" jdbcType="INTEGER" property="abnnumtowarn" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, amonbegintime, amonendtime, amoffbegintime, amoffendtime, pmonbegintime, pmonendtime, 
+    pmoffbegintime, pmoffendtime, checkinsite, abnnumtowarn
+  </sql>
+  <select id="getMe" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from checkinrule
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findCheckinrule" resultMap="BaseResultMap">
+    select * from checkinrule
+  </select>
+
+  <delete id="delete" parameterType="java.lang.String">
+    delete from checkinrule
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="entity.Checkinrule">
+    insert into checkinrule (id, amonbegintime, amonendtime, 
+      amoffbegintime, amoffendtime, pmonbegintime, 
+      pmonendtime, pmoffbegintime, pmoffendtime, 
+      checkinsite, abnnumtowarn)
+    values (#{id,jdbcType=VARCHAR}, #{amonbegintime,jdbcType=TIME}, #{amonendtime,jdbcType=TIME},
+      #{amoffbegintime,jdbcType=TIME}, #{amoffendtime,jdbcType=TIME}, #{pmonbegintime,jdbcType=TIME},
+      #{pmonendtime,jdbcType=TIME}, #{pmoffbegintime,jdbcType=TIME}, #{pmoffendtime,jdbcType=TIME},
+      #{checkinsite,jdbcType=VARCHAR}, #{abnnumtowarn,jdbcType=INTEGER})
+  </insert>
+  <insert id="save" parameterType="entity.Checkinrule">
+    insert into checkinrule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="amonbegintime != null">
+        amonbegintime,
+      </if>
+      <if test="amonendtime != null">
+        amonendtime,
+      </if>
+      <if test="amoffbegintime != null">
+        amoffbegintime,
+      </if>
+      <if test="amoffendtime != null">
+        amoffendtime,
+      </if>
+      <if test="pmonbegintime != null">
+        pmonbegintime,
+      </if>
+      <if test="pmonendtime != null">
+        pmonendtime,
+      </if>
+      <if test="pmoffbegintime != null">
+        pmoffbegintime,
+      </if>
+      <if test="pmoffendtime != null">
+        pmoffendtime,
+      </if>
+      <if test="checkinsite != null">
+        checkinsite,
+      </if>
+      <if test="abnnumtowarn != null">
+        abnnumtowarn,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="amonbegintime != null">
+        #{amonbegintime,jdbcType=TIME},
+      </if>
+      <if test="amonendtime != null">
+        #{amonendtime,jdbcType=TIME},
+      </if>
+      <if test="amoffbegintime != null">
+        #{amoffbegintime,jdbcType=TIME},
+      </if>
+      <if test="amoffendtime != null">
+        #{amoffendtime,jdbcType=TIME},
+      </if>
+      <if test="pmonbegintime != null">
+        #{pmonbegintime,jdbcType=TIME},
+      </if>
+      <if test="pmonendtime != null">
+        #{pmonendtime,jdbcType=TIME},
+      </if>
+      <if test="pmoffbegintime != null">
+        #{pmoffbegintime,jdbcType=TIME},
+      </if>
+      <if test="pmoffendtime != null">
+        #{pmoffendtime,jdbcType=TIME},
+      </if>
+      <if test="checkinsite != null">
+        #{checkinsite,jdbcType=VARCHAR},
+      </if>
+      <if test="abnnumtowarn != null">
+        #{abnnumtowarn,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="entity.Checkinrule">
+    update checkinrule set amonbegintime=#{amonbegintime}, amonendtime=#{amonendtime}, amoffbegintime=#{amoffbegintime}, amoffendtime=#{amoffendtime},
+                        pmonbegintime=#{pmonbegintime}, pmonendtime=#{pmonendtime}, pmoffbegintime=#{pmoffbegintime}, pmoffendtime=#{pmoffendtime}, checkinsite=#{checkinsite},
+                        abnnumtowarn=#{abnnumtowarn} where id=#{id}
+  </update>
+
+  <update id="updateCheckinrule" parameterType="java.util.Map">
+    update checkinrule set amonbegintime=#{amonbegintime}, amonendtime=#{amonendtime}, amoffbegintime=#{amoffbegintime}, amoffendtime=#{amoffendtime},
+                        pmonbegintime=#{pmonbegintime}, pmonendtime=#{pmonendtime}, pmoffbegintime=#{pmoffbegintime}, pmoffendtime=#{pmoffendtime}, checkinsite=#{checkinsite},
+                        abnnumtowarn=#{abnnumtowarn} where id=#{id}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="entity.Checkinrule">
+    update checkinrule
+    set amonbegintime = #{amonbegintime,jdbcType=TIME},
+      amonendtime = #{amonendtime,jdbcType=TIME},
+      amoffbegintime = #{amoffbegintime,jdbcType=TIME},
+      amoffendtime = #{amoffendtime,jdbcType=TIME},
+      pmonbegintime = #{pmonbegintime,jdbcType=TIME},
+      pmonendtime = #{pmonendtime,jdbcType=TIME},
+      pmoffbegintime = #{pmoffbegintime,jdbcType=TIME},
+      pmoffendtime = #{pmoffendtime,jdbcType=TIME},
+      checkinsite = #{checkinsite,jdbcType=VARCHAR},
+      abnnumtowarn = #{abnnumtowarn,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

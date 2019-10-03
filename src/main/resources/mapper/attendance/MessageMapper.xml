@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.attendance.IMessageDao">
+  <resultMap id="BaseResultMap" type="entity.Message">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="datetime" jdbcType="TIMESTAMP" property="datetime" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="text" jdbcType="VARCHAR" property="text" />
+    <result column="acceptid" jdbcType="VARCHAR" property="acceptid" />
+    <result column="sendid" jdbcType="VARCHAR" property="sendid" />
+    <result column="acceptname" jdbcType="VARCHAR" property="acceptname"/>
+    <result column="sendname" jdbcType="VARCHAR" property="sendname"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, datetime, type, text, acceptid, sendid
+  </sql>
+
+  <sql id="conditionByPower">
+    <where>
+      <trim prefix="" suffixOverrides="and">
+        <trim prefix="(" suffix=")" suffixOverrides="or">
+          <if test="id!= null">
+            id like '%${id}%' or
+          </if>
+        </trim>
+      </trim>
+    </where>
+  </sql>
+  <select id="findByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select b.name as sendname,c.name as acceptname,a.id,a.type,a.text,a.datetime
+    from message a
+    inner join user b on b.id = a.sendid
+    inner join user c on c.id = a.acceptid
+    and (a.acceptid like '%${id}%' or a.sendid like '%${id}%') and a.text like '%${text}%'
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select b.name as sendname,c.name as acceptname,a.id,a.type,a.text,a.datetime
+    from message a
+    inner join user b on b.id = a.sendid
+    inner join user c on c.id = a.acceptid
+    and a.id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from message
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="save" parameterType="entity.Message">
+    insert into message (id, datetime, type, 
+      text, acceptid, sendid
+      )
+    values (#{id,jdbcType=VARCHAR}, #{datetime,jdbcType=TIMESTAMP}, #{type,jdbcType=VARCHAR},
+      #{text,jdbcType=VARCHAR}, #{acceptid,jdbcType=VARCHAR}, #{sendid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="entity.Message">
+    insert into message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="datetime != null">
+        datetime,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="text != null">
+        text,
+      </if>
+      <if test="acceptid != null">
+        acceptid,
+      </if>
+      <if test="sendid != null">
+        sendid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="datetime != null">
+        #{datetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptid != null">
+        #{acceptid,jdbcType=VARCHAR},
+      </if>
+      <if test="sendid != null">
+        #{sendid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="entity.Message">
+    update message
+    <set>
+      <if test="datetime != null">
+        datetime = #{datetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        text = #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptid != null">
+        acceptid = #{acceptid,jdbcType=VARCHAR},
+      </if>
+      <if test="sendid != null">
+        sendid = #{sendid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

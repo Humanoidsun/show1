@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.attendance.IUserDao">
+  <resultMap id="BaseResultMap" type="entity.User">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="depid" jdbcType="VARCHAR" property="depid" />
+    <result column="face" jdbcType="VARCHAR" property="face" />
+    <result column="fingerprint" jdbcType="VARCHAR" property="fingerprint" />
+    <result column="loginid" jdbcType="VARCHAR" property="loginid" />
+    <result column="departmentname" jdbcType="VARCHAR" property="departmentname"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, sex, password, phone, birthday, address, email, depid, face, fingerprint,
+    loginid
+  </sql>
+  <select id="login" parameterType="entity.User" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from user
+    where (loginid = #{loginid} or email = #{loginid} or phone = #{loginid}) and password = #{password}
+  </select>
+  <select id="getMe" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    u.*,d.name as departmentname
+    from user u ,department d
+    where u.id = #{id,jdbcType=VARCHAR} and d.id = u.depid
+  </select>
+  <!--&lt;!&ndash;<delete id="deleteByPrimaryKey" parameterType="java.lang.String">&ndash;&gt;-->
+    <!--delete from user-->
+    <!--where id = #{id,jdbcType=VARCHAR}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.entity.User">-->
+    <!--insert into user (id, name, sex,-->
+      <!--password, phone, birthday,-->
+      <!--address, email, depid,-->
+      <!--face, fingerprint, loginid-->
+      <!--)-->
+    <!--values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR},-->
+      <!--#{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE},-->
+      <!--#{address,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{depid,jdbcType=VARCHAR},-->
+      <!--#{face,jdbcType=VARCHAR}, #{fingerprint,jdbcType=VARCHAR}, #{loginid,jdbcType=VARCHAR}-->
+      <!--)-->
+  <!--</insert>-->
+  <insert id="save" parameterType="entity.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="depid != null">
+        depid,
+      </if>
+      <if test="face != null">
+        face,
+      </if>
+      <if test="fingerprint != null">
+        fingerprint,
+      </if>
+      <if test="loginid != null">
+        loginid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="depid != null">
+        #{depid,jdbcType=VARCHAR},
+      </if>
+      <if test="face != null">
+        #{face,jdbcType=VARCHAR},
+      </if>
+      <if test="fingerprint != null">
+        #{fingerprint,jdbcType=VARCHAR},
+      </if>
+      <if test="loginid != null">
+        #{loginid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="entity.User">
+    update user
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="depid != null">
+        depid = #{depid,jdbcType=VARCHAR},
+      </if>
+      <if test="face != null">
+        face = #{face,jdbcType=VARCHAR},
+      </if>
+      <if test="fingerprint != null">
+        fingerprint = #{fingerprint,jdbcType=VARCHAR},
+      </if>
+      <if test="loginid != null">
+        loginid = #{loginid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <!--<update id="updateByPrimaryKey" parameterType="com.entity.User">-->
+    <!--update user-->
+    <!--set name = #{name,jdbcType=VARCHAR},-->
+      <!--sex = #{sex,jdbcType=VARCHAR},-->
+      <!--password = #{password,jdbcType=VARCHAR},-->
+      <!--phone = #{phone,jdbcType=VARCHAR},-->
+      <!--birthday = #{birthday,jdbcType=DATE},-->
+      <!--address = #{address,jdbcType=VARCHAR},-->
+      <!--email = #{email,jdbcType=VARCHAR},-->
+      <!--depid = #{depid,jdbcType=VARCHAR},-->
+      <!--face = #{face,jdbcType=VARCHAR},-->
+      <!--fingerprint = #{fingerprint,jdbcType=VARCHAR},-->
+      <!--loginid = #{loginid,jdbcType=VARCHAR}-->
+    <!--where id = #{id,jdbcType=VARCHAR}-->
+  <!--</update>-->
+  <!--单个对象新增-->
+  <!--<insert id="save" parameterType="entity.User">-->
+    <!--insert into user(id,loginid,password) values(#{id},#{loginid},#{password})-->
+  <!--</insert>-->
+</mapper>

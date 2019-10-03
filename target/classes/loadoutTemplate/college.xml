@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel>
+    <header>
+        高校基本信息表
+    </header>
+    <columns>
+        <col columnName="name" colIndex="1" width="200">高校名称</col>
+        <col columnName="address" colIndex="2" width="260">联系地址</col>
+        <col columnName="postcode" colIndex="3" width="60">邮编</col>
+        <col columnName="url" colIndex="4" width="200">官网</col>
+        <col columnName="charger" colIndex="5" width="100">负责人</col>
+    </columns>
+</excel>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.attendance.IContactDao">
+  <resultMap id="BaseResultMap" type="entity.Contact">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="contactid" jdbcType="VARCHAR" property="contactid" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="contactemail" jdbcType="VARCHAR" property="contactemail"/>
+    <result column="contactname" jdbcType="VARCHAR" property="contactname"/>
+    <result column="contactphone" jdbcType="VARCHAR" property="contactphone"/>
+    <result column="contactdepartmentname" jdbcType="VARCHAR" property="contactdepartmentname"/>
+    <result column="contactsex" jdbcType="VARCHAR" property="contactsex"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userid, contactid, remark
+  </sql>
+  <select id="getMe" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from contact
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="delete" parameterType="java.lang.String">
+    delete from contact
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="entity.Contact">
+    insert into contact (id, userid, contactid, 
+      remark)
+    values (#{id,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{contactid,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="save" parameterType="entity.Contact">
+    insert into contact
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="contactid != null">
+        contactid,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="contactid != null">
+        #{contactid,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="editcon" parameterType="java.util.Map">
+    update contact
+    <set>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="contactid != null">
+        contactid = #{contactid,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="entity.Contact">
+    update contact
+    set userid = #{userid,jdbcType=VARCHAR},
+      contactid = #{contactid,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="findcon" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select b.name as contactname,b.phone as contactphone,b.sex as contactsex,b.email as contactemail,c.name as contactdepartmentname,a.remark,a.id,a.contactid
+        from contact a
+        inner join user b on b.id=a.contactid
+        inner join department c on c.id=b.depid
+        and a.userid = #{userid} and b.name like '%${name}%'
+    </select>
+  <select id="findbyId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select b.name as contactname,a.contactid,a.remark
+        from user b,contact a
+        where a.id =  #{id} and a.contactid=b.id
+   </select>
+</mapper>
