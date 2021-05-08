@@ -24,7 +24,7 @@
     <!-- mybatis版本号 -->
     <mybatis.version>3.2.6</mybatis.version>
     <!-- Apache shiro -->
-    <shiro.version>1.4.0</shiro.version>
+    <shiro.version>1.6.0</shiro.version>
   </properties>
 
   <dependencies>
